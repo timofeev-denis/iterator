@@ -2,6 +2,9 @@ import iterator.OneWayList;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Iterator;
+
+import static junit.framework.Assert.assertTrue;
 import static junit.framework.TestCase.assertEquals;
 
 /**
@@ -25,7 +28,7 @@ public class OneWayListTest {
     }
 
     @Test
-    public void testInsertAtPosition() {
+    public void testInsertAtCorrectPosition() {
         list.add("1");
         list.add("2");
         list.add("3");
@@ -33,6 +36,11 @@ public class OneWayListTest {
         assertEquals("1", list.get(0));
         assertEquals("1.5", list.get(1));
         assertEquals("2", list.get(2));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInsertAtNull() {
+        list.insert("1", null);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -54,7 +62,30 @@ public class OneWayListTest {
     @Test
     public void testCorrectSize() {
         list.add("1");
-        assertEquals(new Integer(1), list.getSize());
+        list.add("2");
+        list.add("3");
+        assertEquals(new Integer(3), list.getSize());
     }
 
+    @Test
+    public void testNext() {
+        list.add("1");
+        Iterator i = list.listIterator();
+        assertEquals("1", i.next());
+    }
+
+    @Test
+    public void testIteratorHasNext() {
+        list.add("1");
+        assertTrue(list.listIterator().hasNext());
+    }
+
+    @Test
+    public void testIteratorIncreasePos() {
+        list.add("1");
+        list.add("2");
+        Iterator i = list.listIterator();
+        assertEquals("1", i.next());
+        assertEquals("2", i.next());
+    }
 }

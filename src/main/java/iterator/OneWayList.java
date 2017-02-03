@@ -28,13 +28,15 @@ public class OneWayList<E> {
 
     class ListItr<E> implements Iterator {
 
+        protected Integer position = 0;
+
         public boolean hasNext() {
-            return getNode(position).next != null;
+            return getNode(this.position) != null;
         }
 
         public E next() {
             Node<E> retNode = (Node<E>) getNode(position);
-            position++;
+            this.position++;
             return retNode.getData();
         }
     }
@@ -50,7 +52,7 @@ public class OneWayList<E> {
      */
     public void add(E element) {
         Node newNode = new Node(element, null);
-        if (this.position == null) {
+        if (this.firstNode == null) {
             // Список пуст
             this.firstNode = newNode;
             this.lastNode = newNode;
@@ -80,6 +82,11 @@ public class OneWayList<E> {
         prevNode.next = newNode;
     }
 
+    /**
+     * Проверяет корректность позиции: значение позиции должно быть от 0 до <длина списка> - 1
+     *
+     * @param position
+     */
     private void checkPosition(Integer position) {
         if (position == null) {
             throw new IllegalArgumentException("Позиция не может быть равна null");
@@ -125,10 +132,6 @@ public class OneWayList<E> {
             seek = seek.next;
         }
         return seek;
-    }
-
-    public Integer getPosition() {
-        return this.position;
     }
 
 }
