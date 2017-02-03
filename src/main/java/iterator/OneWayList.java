@@ -9,10 +9,10 @@ import java.util.Iterator;
 public class OneWayList<E> {
 
     private Integer position = null;
-    private Node<E> lastNode;
-    private Node<E> firstNode;
+    private Node lastNode;
+    private Node firstNode;
 
-    class Node<E> {
+    class Node {
         private E element;
         private Node next;
 
@@ -26,7 +26,7 @@ public class OneWayList<E> {
         }
     }
 
-    class ListItr<E> implements Iterator {
+    public class ListItr implements Iterator {
 
         protected Integer position = 0;
 
@@ -35,13 +35,28 @@ public class OneWayList<E> {
         }
 
         public E next() {
-            Node<E> retNode = (Node<E>) getNode(position);
+            Node retNode = getNode(position);
             this.position++;
             return retNode.getData();
         }
+
+        public void insert(E element) {
+            Node prevNode = getNode(position - 1);
+
+            if (prevNode == null) {
+                Node newNode = new Node(element, null);
+                firstNode = newNode;
+                lastNode = newNode;
+                this.position = 0;
+                return;
+            }
+            Node newNode = new Node(element, prevNode.next);
+
+            prevNode.next = newNode;
+        }
     }
 
-    public Iterator listIterator() {
+    public ListItr listIterator() {
         return new ListItr();
     }
 
@@ -124,10 +139,14 @@ public class OneWayList<E> {
         return getNode(position).getData();
     }
 
-    public Node<E> getNode(Integer pos) {
+    /**
+     * Возвращает узел в заданной позиции
+     * @param position Позиция узла
+     */
+    private Node getNode(Integer position) {
         Integer i = 0;
-        Node<E> seek = this.firstNode;
-        while (i < pos) {
+        Node seek = this.firstNode;
+        while (i < position && seek != null) {
             i++;
             seek = seek.next;
         }
