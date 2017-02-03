@@ -28,37 +28,50 @@ public class MyLinkedList<E> {
         }
     }
 
-    class ListItr<E> implements Iterator{
+    class ListItr<E> implements Iterator {
+
         public boolean hasNext() {
-            return false;
+            return getNode(position).next != null;
         }
 
-        public Object next() {
-            return null;
+        public E next() {
+            Node<E> retNode = (Node<E>) getNode(position);
+            position++;
+            return retNode.getData();
         }
+    }
 
+    public Iterator listIterator() {
+        return new ListItr();
     }
 
     public void add(E element) {
         Node newNode = new Node(element, this.lastElement, null);
-        if(this.position == null) {
+        if (this.position == null) {
+            // List is empty
             this.lastElement = newNode;
             this.firstElement = this.lastElement;
             this.position = 0;
         } else {
             this.lastElement.next = newNode;
+            this.lastElement = newNode;
+            newNode.previous = this.lastElement;
             this.position++;
         }
     }
 
     public E get(Integer pos) {
+        return getNode(pos).getData();
+    }
+
+    public Node<E> getNode(Integer pos) {
         Integer i = 0;
         Node<E> seek = this.firstElement;
-        while(i < pos) {
+        while (i < pos) {
             i++;
             seek = seek.next;
         }
-        return seek.getData();
+        return seek;
     }
 
     public Integer getPosition() {
