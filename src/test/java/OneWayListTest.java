@@ -34,4 +34,27 @@ public class OneWayListTest {
         assertEquals("1.5", list.get(1));
         assertEquals("2", list.get(2));
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInsertAtIncorrectPosition() {
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.insert("1.5", 10);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testInsertAtNegativePosition() {
+        list.add("1");
+        list.add("2");
+        list.add("3");
+        list.insert("1.5", -1);
+    }
+
+    @Test
+    public void testCorrectSize() {
+        list.add("1");
+        assertEquals(new Integer(1), list.getSize());
+    }
+
 }

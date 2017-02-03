@@ -46,7 +46,7 @@ public class OneWayList<E> {
     /**
      * Добавляет элемент в конец списка
      *
-     * @param element
+     * @param element Добавляемый элемент
      */
     public void add(E element) {
         Node newNode = new Node(element, null);
@@ -62,7 +62,14 @@ public class OneWayList<E> {
         }
     }
 
+    /**
+     * Вставляет новый элемент на заданную позицию
+     *
+     * @param element  Вставляемый элемент
+     * @param position Позиция, на которую вставляется элемент
+     */
     public void insert(E element, Integer position) {
+        checkPosition(position);
         Integer i = 0;
         Node prevNode = this.firstNode;
         while (i < position) {
@@ -73,11 +80,38 @@ public class OneWayList<E> {
         prevNode.next = newNode;
     }
 
+    private void checkPosition(Integer position) {
+        if (position == null) {
+            throw new IllegalArgumentException("Позиция не может быть равна null");
+        }
+
+        if (position < 0) {
+            throw new IllegalArgumentException("Позиция не может быть меньше 0");
+        }
+
+        if(position > this.getSize()) {
+            throw new IllegalArgumentException("Позиция не может быть больше длины списка");
+        }
+    }
+
+    /**
+     * Возвращает количество элементов в списке
+     */
+    public Integer getSize() {
+        Integer size = 0;
+        Node node = this.firstNode;
+        while (node != null) {
+            node = node.next;
+            size++;
+        }
+        return size;
+    }
+
     /**
      * Возвращает элемент списка по заданному индексу
      *
      * @param position позиция элемента. Может принимать значения [0..<длина списка>)
-     * @return
+     * @return Элемент типа E
      */
     public E get(Integer position) {
         return getNode(position).getData();
